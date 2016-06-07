@@ -45,20 +45,33 @@ $PAGE->set_heading('Congratulations!');
 
 global $DB;
 $sql = 'SELECT 
-            count(id) as count
+            distinct(course) as courseid
         FROM
             {course_completions}
         WHERE
             userid = :userid AND timecompleted > :startdate;';
 $params = array('userid' => $USER->id, 'startdate' => $startdate);
 
-$newcompletions = $DB->get_record_sql($sql, $params);
+$newcompletions = $DB->get_records_sql($sql, $params);
+
+if (empty($newcompletions)) {
+    redirect($CFG->wwwroot . clean_param($wanturl, PARAM_LOCALURL));
+}
+
+error_log('$newcompletions: ' . print_r($newcompletions, true));
 
 $PAGE->requires->jquery();
 $PAGE->requires->jquery_plugin('fireworks', 'local_completionnotification');
 
 $output =  "<p>Congratulations! You have successfully completed:</p>";
-$output.= html_writer::start_tag('ul');
+$output.= html_writer::start_tag('ul', array('class' => 'courselist'));
+
+foreach ($newcompletions as $completion) {
+    $course = $DB->get_record('course', array('id' => $completion->courseid));
+    $output.= html_writer::tag('li', $course->fullname, array('class' => 'coursename'));
+}
+
+
 $output.= html_writer::end_tag('ul');
 $output.= html_writer::tag('a', 'Continue',
         array('class' => 'btn btn-primary',
