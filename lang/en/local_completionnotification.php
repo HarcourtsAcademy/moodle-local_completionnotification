@@ -25,3 +25,9 @@
 
 $string['pluginname'] = 'Completion Notification';
 $string['pluginname_desc'] = 'Notifies students of course completion.';
+
+// Settings.
+$string['enabled'] = 'Enabled';
+$string['enabled_desc'] = 'Enable Completion Notifications';
+$string['startdate'] = 'Start date';
+$string['startdate_desc'] = 'Limit notifications to completions that occur on or after this date';
