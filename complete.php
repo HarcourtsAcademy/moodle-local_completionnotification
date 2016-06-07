@@ -24,11 +24,43 @@ require_once(__DIR__ . '/../../config.php');
 
 require_login();
 
+$wanturl = required_param('wanturl',PARAM_LOCALURL);
+
+$enabled = get_config('local_completionnotification', 'enabled');
+$startdate = get_config('local_completionnotification', 'startdate');
+
+// TODO: replace the following line with if (!$CFG->enablecompletion || !enabled || !isloggedin() || is_siteadmin()) { .
+if (!$CFG->enablecompletion || !$enabled || !isloggedin()) {
+    redirect($CFG->wwwroot.'/');
+}
+
+if (empty($startdate) || !is_int(intval($startdate))) {
+    redirect($CFG->wwwroot.'/');
+}
+
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url('/local/completionnotification/complete.php');
 $PAGE->set_title('Course Complete');
 $PAGE->set_heading('Congratulations!');
 
+global $DB;
+$sql = 'SELECT 
+            count(id) as count
+        FROM
+            {course_completions}
+        WHERE
+            userid = :userid AND timecompleted > :startdate;';
+$params = array('userid' => $USER->id, 'startdate' => $startdate);
+
+$newcompletions = $DB->get_record_sql($sql, $params);
+
+$output =  "<p>Congratulations! You have successfully completed:</p>";
+$output.= html_writer::start_tag('ul');
+$output.= html_writer::end_tag('ul');
+$output.= html_writer::tag('a', 'Continue',
+        array('class' => 'btn btn-primary',
+              'href' => $CFG->wwwroot . clean_param($wanturl, PARAM_LOCALURL)));
+
 echo $OUTPUT->header();
-echo "<p>here</p>";
+echo $output;
 echo $OUTPUT->footer();
