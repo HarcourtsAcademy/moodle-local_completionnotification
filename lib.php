@@ -31,12 +31,11 @@ if (!$CFG->enablecompletion || !$enabled || !isloggedin()) {
 }
 
 global $PAGE;
-// Skip if displaying the completion notification page.
-if ($PAGE->url->out_as_local_url() == '/local/completionnotification/complete.php') {
+// Skip if displaying the completion notification page or an admin page.
+if ($PAGE->url->out_as_local_url() == '/local/completionnotification/complete.php' ||
+    $PAGE->pagelayout == 'admin') {
     return;
 }
-
-// TODO: Skip if showing a Moodle admin page.
 
 error_log('$startdate: ' . print_r($startdate, true) . is_int($startdate));
 
@@ -67,5 +66,5 @@ error_log('$newcompletions: ' . print_r($newcompletions, true));
 
 if ($newcompletions->count > 0) {
     $url = new moodle_url('/local/completionnotification/complete.php', array('wanturl' => $PAGE->url->out_as_local_url()));
-//    redirect($url);
+    redirect($url);
 }
