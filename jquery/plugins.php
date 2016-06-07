@@ -23,5 +23,5 @@
  */
 
 $plugins = array(
-    'fireworks'  => array('files' => array('jquery-fireworks-1.0.0.js')),
+    'fireworks'  => array('files' => array('jquery-fireworks-1.0.0.min.js')),
 );
