@@ -44,6 +44,7 @@ TODO:
             canvas.style.bottom = '0px';
             canvas.style.left = '0px';
             canvas.style.right = '0px';
+            canvas.style.pointerEvents = 'none';
 
             // Kickoff the loops
             data.interval = setInterval(loop.bind(this, data), 1000 / 50);
