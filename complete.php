@@ -54,6 +54,9 @@ $params = array('userid' => $USER->id, 'startdate' => $startdate);
 
 $newcompletions = $DB->get_record_sql($sql, $params);
 
+$PAGE->requires->jquery();
+$PAGE->requires->jquery_plugin('fireworks', 'local_completionnotification');
+
 $output =  "<p>Congratulations! You have successfully completed:</p>";
 $output.= html_writer::start_tag('ul');
 $output.= html_writer::end_tag('ul');
