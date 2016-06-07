@@ -22,20 +22,20 @@
 
 require_once(__DIR__ . '/../../config.php');
 
-require_login();
+$wanturl = optional_param('wanturl', '/', PARAM_LOCALURL);
 
-$wanturl = required_param('wanturl',PARAM_LOCALURL);
+require_login(null, false, null, $wanturl);
 
 $enabled = get_config('local_completionnotification', 'enabled');
 $startdate = get_config('local_completionnotification', 'startdate');
 
 // TODO: replace the following line with if (!$CFG->enablecompletion || !enabled || !isloggedin() || is_siteadmin()) { .
 if (!$CFG->enablecompletion || !$enabled || !isloggedin()) {
-    redirect($CFG->wwwroot.'/');
+    redirect($CFG->wwwroot . clean_param($wanturl, PARAM_LOCALURL));
 }
 
 if (empty($startdate) || !is_int(intval($startdate))) {
-    redirect($CFG->wwwroot.'/');
+    redirect($CFG->wwwroot . clean_param($wanturl, PARAM_LOCALURL));
 }
 
 $PAGE->set_context(context_system::instance());
