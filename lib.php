@@ -23,11 +23,36 @@
 defined('MOODLE_INTERNAL') || die();
 
 $enabled = get_config('local_completionnotification', 'enabled');
-// TODO: replace the following line with if (!enabled || !isloggedin() || is_siteadmin()) { .
-if (!$enabled || !isloggedin()) {
+$startdate = get_config('local_completionnotification', 'startdate');
+
+// TODO: replace the following line with if (!$CFG->enablecompletion || !enabled || !isloggedin() || is_siteadmin()) { .
+if (!$CFG->enablecompletion || !$enabled || !isloggedin()) {
     return;
 }
 
-$startdate = get_config('local_completionnotification', 'startdate');
+error_log('$startdate: ' . print_r($startdate, true) . is_int($startdate));
 
-error_log('HERE: ' . time());
+if (empty($startdate) || !is_int(intval($startdate))) {
+    return;
+}
+
+// Regular Completion cron, capturing the output in an output buffer for deletion.
+require_once($CFG->dirroot.'/completion/cron.php');
+ob_start();
+completion_cron_criteria();
+completion_cron_completions();
+ob_end_clean();
+
+global $DB, $USER;
+
+$sql = 'SELECT 
+            *
+        FROM
+            {course_completions}
+        WHERE
+            userid = :userid AND timecompleted > :startdate;';
+$params = array('userid' => $USER->id, 'startdate' => $startdate);
+
+$newcompletions = $DB->get_records_sql($sql, $params);
+
+error_log('$newcompletions: ' . print_r($newcompletions, true));
