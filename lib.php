@@ -65,6 +65,7 @@ $newcompletions = $DB->get_record_sql($sql, $params);
 error_log('$newcompletions: ' . print_r($newcompletions, true));
 
 if ($newcompletions->count > 0) {
-    $url = new moodle_url('/local/completionnotification/complete.php', array('wanturl' => $PAGE->url->out_as_local_url()));
+    $url = new moodle_url('/local/completionnotification/complete.php',
+            array('wanturl' => $PAGE->url->out_as_local_url()));
     redirect($url);
 }
