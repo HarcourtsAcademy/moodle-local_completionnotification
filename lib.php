@@ -30,6 +30,12 @@ if (!$CFG->enablecompletion || !$enabled || !isloggedin()) {
     return;
 }
 
+global $PAGE;
+// Skip if displaying the completion notification page.
+if ($PAGE->url->out_as_local_url() == '/local/completionnotification/complete.php') {
+    return;
+}
+
 error_log('$startdate: ' . print_r($startdate, true) . is_int($startdate));
 
 if (empty($startdate) || !is_int(intval($startdate))) {
@@ -56,3 +62,7 @@ $params = array('userid' => $USER->id, 'startdate' => $startdate);
 $newcompletions = $DB->get_records_sql($sql, $params);
 
 error_log('$newcompletions: ' . print_r($newcompletions, true));
+
+error_log('$PAGE: ' . print_r($PAGE, true));
+
+//$url = new moodle_url('/local/completionnotification/complete.php', array('course'=>$course->id));
