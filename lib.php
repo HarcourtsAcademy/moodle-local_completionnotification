@@ -36,6 +36,8 @@ if ($PAGE->url->out_as_local_url() == '/local/completionnotification/complete.ph
     return;
 }
 
+// TODO: Skip if showing a Moodle admin page.
+
 error_log('$startdate: ' . print_r($startdate, true) . is_int($startdate));
 
 if (empty($startdate) || !is_int(intval($startdate))) {
@@ -52,17 +54,18 @@ ob_end_clean();
 global $DB, $USER;
 
 $sql = 'SELECT 
-            *
+            count(id) as count
         FROM
             {course_completions}
         WHERE
             userid = :userid AND timecompleted > :startdate;';
 $params = array('userid' => $USER->id, 'startdate' => $startdate);
 
-$newcompletions = $DB->get_records_sql($sql, $params);
+$newcompletions = $DB->get_record_sql($sql, $params);
 
 error_log('$newcompletions: ' . print_r($newcompletions, true));
 
-error_log('$PAGE: ' . print_r($PAGE, true));
-
-//$url = new moodle_url('/local/completionnotification/complete.php', array('course'=>$course->id));
+if ($newcompletions->count > 0) {
+    $url = new moodle_url('/local/completionnotification/complete.php', array('wanturl' => $PAGE->url->out_as_local_url()));
+//    redirect($url);
+}
