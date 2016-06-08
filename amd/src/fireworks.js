@@ -39,7 +39,7 @@ define(['jquery'], function($) {
                 element.style.position = 'relative';
             }
             element.appendChild(canvas);
-            canvas.style.position = 'absolute';
+            canvas.style.position = 'fixed';
             canvas.style.top = '0px';
             canvas.style.bottom = '0px';
             canvas.style.left = '0px';
