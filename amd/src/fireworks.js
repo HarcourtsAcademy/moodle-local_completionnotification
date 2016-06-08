@@ -102,13 +102,13 @@ define(['jquery'], function($) {
     function loop(data) {
         // Launch a new rocket
         launch(data);
-
+        
         // Update screen size
-        if (data.canvas_width != data.element.offsetWidth) {
-            data.canvas_width = data.canvas.width = data.canvas_buffer.width = data.element.offsetWidth;
+        if (data.canvas.width != window.innerWidth) {
+            data.canvas.width = window.innerWidth;
         }
-        if (data.canvas_height != data.element.offsetHeight) {
-            data.canvas_height = data.canvas.height = data.canvas_buffer.height = data.element.offsetHeight;
+        if (data.canvas.height != window.innerHeight) {
+            data.canvas.height = window.innerHeight;
         }
 
         // Fade the background out slowly
