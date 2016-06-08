@@ -61,7 +61,7 @@ if (empty($newcompletions)) {
 error_log('$newcompletions: ' . print_r($newcompletions, true));
 
 $PAGE->requires->jquery();
-$PAGE->requires->jquery_plugin('fireworks', 'local_completionnotification');
+$PAGE->requires->js_call_amd('local_completionnotification/fireworks', 'init');
 
 $output =  "<p>Congratulations! You have successfully completed:</p>";
 $output.= html_writer::start_tag('ul', array('class' => 'courselist'));
@@ -80,3 +80,4 @@ $output.= html_writer::tag('a', 'Continue',
 echo $OUTPUT->header();
 echo $output;
 echo $OUTPUT->footer();
+

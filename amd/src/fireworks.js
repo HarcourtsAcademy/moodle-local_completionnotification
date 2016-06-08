@@ -7,7 +7,7 @@ TODO:
  * Make the canvas fit in the z-order
 */
 
-(function( $ ) {
+define(['jquery'], function($) {
     var MAX_ROCKETS = 5,
         MAX_PARTICLES = 500;
 
@@ -17,7 +17,7 @@ TODO:
 
             // Check this element isn't already inited
             if (jqe.data('fireworks_data') !== undefined) {
-                console.log('Looks like this element is already inited!');
+                // console.log('Looks like this element is already inited!');
                 return;
             }
 
@@ -57,7 +57,7 @@ TODO:
 
             // Check this element isn't already inited
             if (jqe.data('fireworks_data') === undefined) {
-                console.log('Looks like this element is not yet inited!');
+                // console.log('Looks like this element is not yet inited!');
                 return;
             }
             var data = jqe.data('fireworks_data');
@@ -166,7 +166,7 @@ TODO:
             x: 0,
             y: 0
         };
-        this.shrink = .97;
+        this.shrink = 0.97;
         this.size = 2;
 
         this.resistance = 1;
@@ -302,5 +302,16 @@ TODO:
 
         c.restore();
     };
-}(jQuery));
-$('body').fireworks();
+    
+    $('body').fireworks();
+    
+    return {};
+});
+
+//define(['jquery'], function($) {
+//    return {
+//        init: function ($) {
+//           $('body').fireworks();
+//        }
+//    }
+//});
