@@ -71,6 +71,9 @@ define(['jquery'], function($) {
 
             // Reset the elements positioning
             data.element.style.position = '';
+        },
+        'start': function () {
+           $('body').fireworks();
         }
     };
 
@@ -303,9 +306,7 @@ define(['jquery'], function($) {
         c.restore();
     };
     
-    $('body').fireworks();
-    
-    return {};
+    return FUNCTIONS;
 });
 
 //define(['jquery'], function($) {
