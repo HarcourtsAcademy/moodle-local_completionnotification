@@ -45,6 +45,7 @@ define(['jquery'], function($) {
             canvas.style.left = '0px';
             canvas.style.right = '0px';
             canvas.style.pointerEvents = 'none';
+            canvas.style.zIndex = 101;
 
             // Kickoff the loops
             data.interval = setInterval(loop.bind(this, data), 1000 / 50);
