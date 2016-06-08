@@ -39,6 +39,7 @@ if (empty($startdate) || !is_int(intval($startdate))) {
 }
 
 $PAGE->set_context(context_system::instance());
+$PAGE->set_pagelayout('mydashboard');
 $PAGE->set_url('/local/completionnotification/complete.php');
 $PAGE->set_title('Course Complete');
 $PAGE->set_heading('Congratulations!');
@@ -63,7 +64,7 @@ error_log('$newcompletions: ' . print_r($newcompletions, true));
 $PAGE->requires->jquery();
 $PAGE->requires->js_call_amd('local_completionnotification/fireworks', 'start');
 
-$output =  "<p>Congratulations! You have successfully completed:</p>";
+$output = html_writer::tag('h2', 'You have successfully completed:');
 $output.= html_writer::start_tag('ul', array('class' => 'courselist'));
 
 foreach ($newcompletions as $completion) {
@@ -71,11 +72,13 @@ foreach ($newcompletions as $completion) {
     $output.= html_writer::tag('li', $course->fullname, array('class' => 'coursename'));
 }
 
-
 $output.= html_writer::end_tag('ul');
-$output.= html_writer::tag('a', 'Continue',
-        array('class' => 'btn btn-primary',
-              'href' => $CFG->wwwroot . clean_param($wanturl, PARAM_LOCALURL)));
+
+// Print link to continue to the wanted link.
+$output.= $OUTPUT->container_start('buttons');
+$url = new moodle_url(clean_param($wanturl, PARAM_LOCALURL));
+$output.= $OUTPUT->single_button($url, 'Continue', 'get');
+$output.= $OUTPUT->container_end('buttons');
 
 echo $OUTPUT->header();
 echo $output;

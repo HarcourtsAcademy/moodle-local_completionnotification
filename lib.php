@@ -62,7 +62,7 @@ $params = array('userid' => $USER->id, 'startdate' => $startdate);
 
 $newcompletions = $DB->get_record_sql($sql, $params);
 
-error_log('$newcompletions: ' . print_r($newcompletions, true));
+// TODO: remove: error_log('$newcompletions: ' . print_r($newcompletions, true));
 
 if ($newcompletions->count > 0) {
     $url = new moodle_url('/local/completionnotification/complete.php',
