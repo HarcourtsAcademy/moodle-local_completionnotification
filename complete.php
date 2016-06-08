@@ -21,6 +21,7 @@
  */
 
 require_once(__DIR__ . '/../../config.php');
+require_once($CFG->dirroot.'/blocks/course_overview/locallib.php');
 
 $wanturl = optional_param('wanturl', '/', PARAM_LOCALURL);
 
@@ -46,11 +47,15 @@ $PAGE->set_heading('Congratulations!');
 
 global $DB;
 $sql = 'SELECT 
-            distinct(course) as courseid
+            *
         FROM
-            {course_completions}
+            {course_completions} cc
+                JOIN
+            {course} c ON cc.course = c.id
         WHERE
-            userid = :userid AND timecompleted > :startdate;';
+            userid = :userid AND timecompleted > :startdate
+        GROUP BY
+            cc.course;';
 $params = array('userid' => $USER->id, 'startdate' => $startdate);
 
 $newcompletions = $DB->get_records_sql($sql, $params);
@@ -67,12 +72,8 @@ $PAGE->requires->js_call_amd('local_completionnotification/fireworks', 'start');
 $output = html_writer::tag('h2', 'You have successfully completed:');
 $output.= html_writer::start_tag('ul', array('class' => 'courselist'));
 
-foreach ($newcompletions as $completion) {
-    $course = $DB->get_record('course', array('id' => $completion->courseid));
-    $output.= html_writer::tag('li', $course->fullname, array('class' => 'coursename'));
-}
-
-$output.= html_writer::end_tag('ul');
+$renderer = $PAGE->get_renderer('block_course_overview');
+$output.= $renderer->course_overview($newcompletions, array());
 
 // Print link to continue to the wanted link.
 $output.= $OUTPUT->container_start('buttons');
