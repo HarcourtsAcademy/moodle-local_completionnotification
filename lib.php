@@ -25,8 +25,7 @@ defined('MOODLE_INTERNAL') || die();
 $enabled = get_config('local_completionnotification', 'enabled');
 $startdate = get_config('local_completionnotification', 'startdate');
 
-// TODO: replace the following line with if (!$CFG->enablecompletion || !enabled || !isloggedin() || is_siteadmin()) { .
-if (!$CFG->enablecompletion || !$enabled || !isloggedin()) {
+if (!$CFG->enablecompletion || !$enabled || !isloggedin() || is_siteadmin()) {
     return;
 }
 
