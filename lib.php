@@ -29,16 +29,16 @@ if (!$CFG->enablecompletion || !$enabled || !isloggedin() || is_siteadmin()) {
     return;
 }
 
+$startdatets = date_create($startdate)->getTimestamp();
+
+if (empty($startdatets) || !is_int(intval($startdatets))) {
+    return;
+}
+
 global $PAGE;
 // Skip if displaying the completion notification page or an admin page.
 if ($PAGE->url->out_as_local_url() == '/local/completionnotification/complete.php' ||
     $PAGE->pagelayout == 'admin') {
-    return;
-}
-
-error_log('$startdate: ' . print_r($startdate, true) . is_int($startdate));
-
-if (empty($startdate) || !is_int(intval($startdate))) {
     return;
 }
 
@@ -58,8 +58,8 @@ $sql = 'SELECT
                 LEFT JOIN
 	        {local_completionnotification} lcn ON cc.id = lcn.coursecompletionid
         WHERE
-            userid = :userid AND timecompleted > :startdate AND lcn.coursecompletionid is null;';
-$params = array('userid' => $USER->id, 'startdate' => $startdate);
+            userid = :userid AND timecompleted > :startdatets AND lcn.coursecompletionid is null;';
+$params = array('userid' => $USER->id, 'startdatets' => $startdatets);
 
 $newcompletions = $DB->get_record_sql($sql, $params);
 

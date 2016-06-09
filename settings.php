@@ -41,7 +41,7 @@ if (is_siteadmin()) {
                             get_string('startdate', 'local_completionnotification'),
                             get_string('startdate_desc', 'local_completionnotification'),
                             null,
-                            PARAM_INT,
+                            PARAM_TEXT,
                             30)
             );
 
