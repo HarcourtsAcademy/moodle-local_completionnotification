@@ -47,13 +47,16 @@ $PAGE->set_heading('Congratulations!');
 
 global $DB;
 $sql = 'SELECT 
-            *
+            cc.id as coursecompletionid,
+            c.*
         FROM
             {course_completions} cc
                 JOIN
             {course} c ON cc.course = c.id
+                LEFT JOIN
+	        {local_completionnotification} lcn ON cc.id = lcn.coursecompletionid
         WHERE
-            userid = :userid AND timecompleted > :startdate
+            userid = :userid AND timecompleted > :startdate AND lcn.coursecompletionid is null
         GROUP BY
             cc.course;';
 $params = array('userid' => $USER->id, 'startdate' => $startdate);
@@ -63,8 +66,6 @@ $newcompletions = $DB->get_records_sql($sql, $params);
 if (empty($newcompletions)) {
     redirect($CFG->wwwroot . clean_param($wanturl, PARAM_LOCALURL));
 }
-
-error_log('$newcompletions: ' . print_r($newcompletions, true));
 
 $PAGE->requires->jquery();
 $PAGE->requires->js_call_amd('local_completionnotification/fireworks', 'start');
@@ -84,4 +85,13 @@ $output.= $OUTPUT->container_end('buttons');
 echo $OUTPUT->header();
 echo $output;
 echo $OUTPUT->footer();
+
+// Store the displayed notification so it is only displayed once.
+foreach ($newcompletions as $completion) {
+    $record = new stdclass();
+    $record->coursecompletionid = $completion->coursecompletionid;
+    $record->timenotified = time();
+    
+    $DB->insert_record('local_completionnotification', $record);
+}
 

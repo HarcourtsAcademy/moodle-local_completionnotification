@@ -53,11 +53,13 @@ ob_end_clean();
 global $DB, $USER;
 
 $sql = 'SELECT 
-            count(id) as count
+            count(cc.id) as count
         FROM
-            {course_completions}
+            {course_completions} cc
+                LEFT JOIN
+	        {local_completionnotification} lcn ON cc.id = lcn.coursecompletionid
         WHERE
-            userid = :userid AND timecompleted > :startdate;';
+            userid = :userid AND timecompleted > :startdate AND lcn.coursecompletionid is null;';
 $params = array('userid' => $USER->id, 'startdate' => $startdate);
 
 $newcompletions = $DB->get_record_sql($sql, $params);
@@ -67,5 +69,5 @@ $newcompletions = $DB->get_record_sql($sql, $params);
 if ($newcompletions->count > 0) {
     $url = new moodle_url('/local/completionnotification/complete.php',
             array('wanturl' => $PAGE->url->out_as_local_url()));
-// TODO: uncomment    redirect($url);
+    redirect($url);
 }
