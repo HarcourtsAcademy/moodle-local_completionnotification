@@ -22,8 +22,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2016060701;                // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2016060901;                // The current plugin version (Date: YYYYMMDDXX).
 $plugin->component = 'local_completionnotification';          // Full name of the plugin (used for diagnostics).
-$plugin->release   = '0.0 (Build: 2016060701)';
+$plugin->release   = '0.0 (Build: 2016060901)';
 $plugin->requires  = 2014051200;                // Requires Moodle 2.7+.
 $plugin->maturity  = MATURITY_ALPHA;
