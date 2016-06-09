@@ -71,10 +71,14 @@ $PAGE->requires->jquery();
 $PAGE->requires->js_call_amd('local_completionnotification/fireworks', 'start');
 
 $output = html_writer::tag('h2', 'You have successfully completed:');
-$output.= html_writer::start_tag('ul', array('class' => 'courselist'));
+$output.= html_writer::start_div('block_course_overview');
+$output.= html_writer::start_div('content');
 
 $renderer = $PAGE->get_renderer('block_course_overview');
 $output.= $renderer->course_overview($newcompletions, array());
+
+$output.= html_writer::end_div();
+$output.= html_writer::end_div();
 
 // Print link to continue to the wanted link.
 $output.= $OUTPUT->container_start('buttons');
